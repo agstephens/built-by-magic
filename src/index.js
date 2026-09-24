@@ -1,4 +1,12 @@
 const { isValidNumber } = require('./utils');
+const {
+  DEFAULT_SETTINGS,
+  VALID_THEMES,
+  VALID_PRECISION_OPTIONS,
+  VALID_DEFAULT_TABS,
+  validateSettings,
+  formatNumberWithPrecision,
+} = require('./settings');
 
 /**
  * Calculates base raised to the power of exponent (base^exponent).
@@ -38,4 +46,10 @@ function calculateCircleArea(radius) {
 module.exports = {
   calculatePower,
   calculateCircleArea,
+  DEFAULT_SETTINGS,
+  VALID_THEMES,
+  VALID_PRECISION_OPTIONS,
+  VALID_DEFAULT_TABS,
+  validateSettings,
+  formatNumberWithPrecision,
 };

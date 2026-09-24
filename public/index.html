@@ -5,24 +5,140 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Multi-Utility Tool Hub</title>
   <style>
+    :root {
+      --bg-color: #f4f6f9;
+      --text-color: #333333;
+      --heading-color: #1a1a1a;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(0, 0, 0, 0.08);
+      --nav-bg: #ffffff;
+      --nav-shadow: rgba(0, 0, 0, 0.05);
+      --nav-btn-color: #555555;
+      --nav-btn-hover-bg: #eef6ff;
+      --nav-btn-hover-color: #0066cc;
+      --primary-color: #0066cc;
+      --primary-hover: #0052a3;
+      --input-bg: #ffffff;
+      --input-border: #ccc;
+      --input-text: #333333;
+      --label-color: #555555;
+      --result-bg: #eef6ff;
+      --result-border: #b8daff;
+      --result-title: #666666;
+      --result-value: #0066cc;
+      --error-bg: #fdf2f2;
+      --error-border: #f8b4b4;
+      --error-text: #9b1c1c;
+      --success-bg: #e6fffa;
+      --success-border: #b2f5ea;
+      --success-text: #234e52;
+      --canvas-bg: #ffffff;
+      --canvas-border: #e0e0e0;
+    }
+
+    /* Dark theme overrides */
+    [data-theme="dark"] {
+      --bg-color: #121824;
+      --text-color: #e2e8f0;
+      --heading-color: #f8fafc;
+      --card-bg: #1e293b;
+      --card-shadow: rgba(0, 0, 0, 0.4);
+      --nav-bg: #1e293b;
+      --nav-shadow: rgba(0, 0, 0, 0.3);
+      --nav-btn-color: #94a3b8;
+      --nav-btn-hover-bg: #334155;
+      --nav-btn-hover-color: #38bdf8;
+      --primary-color: #0284c7;
+      --primary-hover: #0369a1;
+      --input-bg: #0f172a;
+      --input-border: #475569;
+      --input-text: #f8fafc;
+      --label-color: #cbd5e1;
+      --result-bg: #0f2b48;
+      --result-border: #1e40af;
+      --result-title: #94a3b8;
+      --result-value: #38bdf8;
+      --error-bg: #450a0a;
+      --error-border: #991b1b;
+      --error-text: #fca5a5;
+      --success-bg: #064e3b;
+      --success-border: #047857;
+      --success-text: #6ee7b7;
+      --canvas-bg: #0f172a;
+      --canvas-border: #334155;
+    }
+
+    /* Ocean theme overrides */
+    [data-theme="ocean"] {
+      --bg-color: #e0f2fe;
+      --text-color: #0f172a;
+      --heading-color: #0369a1;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(3, 105, 161, 0.12);
+      --nav-bg: #ffffff;
+      --nav-shadow: rgba(3, 105, 161, 0.08);
+      --nav-btn-color: #0369a1;
+      --nav-btn-hover-bg: #bae6fd;
+      --nav-btn-hover-color: #0284c7;
+      --primary-color: #0284c7;
+      --primary-hover: #0369a1;
+      --input-bg: #f0f9ff;
+      --input-border: #7dd3fc;
+      --input-text: #0c4a6e;
+      --label-color: #0369a1;
+      --result-bg: #e0f2fe;
+      --result-border: #7dd3fc;
+      --result-title: #0369a1;
+      --result-value: #0284c7;
+      --canvas-bg: #ffffff;
+      --canvas-border: #bae6fd;
+    }
+
+    /* Forest theme overrides */
+    [data-theme="forest"] {
+      --bg-color: #f0fdf4;
+      --text-color: #14532d;
+      --heading-color: #166534;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(22, 101, 52, 0.12);
+      --nav-bg: #ffffff;
+      --nav-shadow: rgba(22, 101, 52, 0.08);
+      --nav-btn-color: #166534;
+      --nav-btn-hover-bg: #dcfce7;
+      --nav-btn-hover-color: #15803d;
+      --primary-color: #15803d;
+      --primary-hover: #166534;
+      --input-bg: #f0fdf4;
+      --input-border: #86efac;
+      --input-text: #14532d;
+      --label-color: #166534;
+      --result-bg: #dcfce7;
+      --result-border: #86efac;
+      --result-title: #166534;
+      --result-value: #15803d;
+      --canvas-bg: #ffffff;
+      --canvas-border: #bbf7d0;
+    }
+
     * {
       box-sizing: border-box;
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f4f6f9;
-      color: #333;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
       margin: 0;
       padding: 20px 10px;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     nav.top-nav {
-      background: #ffffff;
+      background: var(--nav-bg);
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 15px var(--nav-shadow);
       padding: 8px;
       display: flex;
       gap: 8px;
@@ -30,12 +146,13 @@
       width: 100%;
       max-width: 520px;
       justify-content: center;
+      transition: background-color 0.3s ease;
     }
     .nav-btn {
       flex: 1;
       padding: 10px 12px;
       background: transparent;
-      color: #555;
+      color: var(--nav-btn-color);
       border: none;
       border-radius: 8px;
       font-size: 14px;
@@ -45,20 +162,21 @@
       text-align: center;
     }
     .nav-btn:hover {
-      background-color: #eef6ff;
-      color: #0066cc;
+      background-color: var(--nav-btn-hover-bg);
+      color: var(--nav-btn-hover-color);
     }
     .nav-btn.active {
-      background-color: #0066cc;
-      color: white;
+      background-color: var(--primary-color);
+      color: #ffffff;
     }
     .card {
-      background: #ffffff;
+      background: var(--card-bg);
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 20px var(--card-shadow);
       padding: 32px;
       width: 100%;
       max-width: 520px;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
     .tab-content {
       display: none;
@@ -69,7 +187,7 @@
     h1 {
       margin-top: 0;
       font-size: 24px;
-      color: #1a1a1a;
+      color: var(--heading-color);
       text-align: center;
       margin-bottom: 24px;
     }
@@ -88,34 +206,40 @@
       font-weight: 600;
       margin-bottom: 8px;
       font-size: 14px;
-      color: #555;
+      color: var(--label-color);
     }
-    input[type="number"], input[type="text"] {
+    input[type="number"], input[type="text"], select {
       width: 100%;
       padding: 10px 12px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--input-border);
       border-radius: 6px;
       font-size: 16px;
-      transition: border-color 0.2s;
+      background-color: var(--input-bg);
+      color: var(--input-text);
+      transition: border-color 0.2s, background-color 0.3s ease, color 0.3s ease;
     }
     input[type="color"] {
       width: 100%;
       height: 44px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--input-border);
       border-radius: 6px;
       padding: 4px;
       cursor: pointer;
-      background: #fff;
+      background: var(--input-bg);
     }
-    input:focus {
+    input:focus, select:focus {
       outline: none;
-      border-color: #0066cc;
+      border-color: var(--primary-color);
+    }
+    .button-group {
+      display: flex;
+      gap: 12px;
     }
     button.action-btn {
       width: 100%;
       padding: 12px;
-      background-color: #0066cc;
-      color: white;
+      background-color: var(--primary-color);
+      color: #ffffff;
       border: none;
       border-radius: 6px;
       font-size: 16px;
@@ -124,44 +248,68 @@
       transition: background-color 0.2s;
     }
     button.action-btn:hover {
-      background-color: #0052a3;
+      background-color: var(--primary-hover);
+    }
+    button.secondary-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: transparent;
+      color: var(--text-color);
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button.secondary-btn:hover {
+      background-color: var(--nav-btn-hover-bg);
     }
     .result-box {
       margin-top: 24px;
       padding: 16px;
       border-radius: 6px;
-      background-color: #eef6ff;
-      border: 1px solid #b8daff;
+      background-color: var(--result-bg);
+      border: 1px solid var(--result-border);
       text-align: center;
     }
     .result-box.error {
-      background-color: #fdf2f2;
-      border-color: #f8b4b4;
-      color: #9b1c1c;
+      background-color: var(--error-bg);
+      border-color: var(--error-border);
+      color: var(--error-text);
+    }
+    .result-box.success {
+      background-color: var(--success-bg);
+      border-color: var(--success-border);
+      color: var(--success-text);
     }
     .result-title {
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #666;
+      color: var(--result-title);
       margin-bottom: 4px;
     }
     .result-value {
       font-size: 22px;
       font-weight: bold;
-      color: #0066cc;
+      color: var(--result-value);
     }
     .result-box.error .result-value {
-      color: #9b1c1c;
+      color: var(--error-text);
+      font-size: 16px;
+    }
+    .result-box.success .result-value {
+      color: var(--success-text);
       font-size: 16px;
     }
     canvas#colour-canvas {
       display: block;
       margin: 20px auto 0;
       border-radius: 8px;
-      border: 1px solid #e0e0e0;
+      border: 1px solid var(--canvas-border);
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      background-color: #ffffff;
+      background-color: var(--canvas-bg);
       max-width: 100%;
       height: auto;
     }
@@ -172,6 +320,7 @@
     <button class="nav-btn active" data-tab="exponent-tab">Exponent</button>
     <button class="nav-btn" data-tab="colour-tab">Colour Tool</button>
     <button class="nav-btn" data-tab="circle-tab">Circle Area</button>
+    <button class="nav-btn" data-tab="settings-tab">Settings</button>
   </nav>
 
   <div class="card">
@@ -229,9 +378,118 @@
         <div id="circle-result-value" class="result-value"></div>
       </div>
     </div>
+
+    <!-- Settings Tool -->
+    <div id="settings-tab" class="tab-content">
+      <h1>Preferences & Settings</h1>
+      <form id="settings-form">
+        <div class="form-group">
+          <label for="theme-select">Theme</label>
+          <select id="theme-select">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="ocean">Ocean Blue</option>
+            <option value="forest">Forest Green</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="precision-select">Decimal Precision</label>
+          <select id="precision-select">
+            <option value="auto">Auto (Full Precision)</option>
+            <option value="0">0 Decimals</option>
+            <option value="2">2 Decimals</option>
+            <option value="4">4 Decimals</option>
+            <option value="6">6 Decimals</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="default-tab-select">Default Startup Tab</label>
+          <select id="default-tab-select">
+            <option value="exponent-tab">Exponential Calculator</option>
+            <option value="colour-tab">Colour Art Generator</option>
+            <option value="circle-tab">Circle Area Calculator</option>
+            <option value="settings-tab">Settings</option>
+          </select>
+        </div>
+        <div class="button-group">
+          <button type="submit" class="action-btn" id="save-settings-btn">Save Settings</button>
+          <button type="button" class="secondary-btn" id="reset-settings-btn">Reset Defaults</button>
+        </div>
+      </form>
+      <div id="settings-message" class="result-box success" style="display: none;">
+        <div id="settings-message-value" class="result-value"></div>
+      </div>
+    </div>
   </div>
 
   <script>
+    // Constants for Settings
+    const DEFAULT_SETTINGS = {
+      theme: 'light',
+      decimalPrecision: 'auto',
+      defaultTab: 'exponent-tab'
+    };
+
+    const SETTINGS_STORAGE_KEY = 'builtbymagic_user_settings';
+
+    // Load settings from localStorage with fallback defaults
+    function loadSettings() {
+      try {
+        const stored = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          return {
+            theme: ['light', 'dark', 'ocean', 'forest'].includes(parsed.theme) ? parsed.theme : DEFAULT_SETTINGS.theme,
+            decimalPrecision: ['auto', '0', '2', '4', '6'].includes(String(parsed.decimalPrecision)) ? String(parsed.decimalPrecision) : DEFAULT_SETTINGS.decimalPrecision,
+            defaultTab: ['exponent-tab', 'colour-tab', 'circle-tab', 'settings-tab'].includes(parsed.defaultTab) ? parsed.defaultTab : DEFAULT_SETTINGS.defaultTab
+          };
+        }
+      } catch (e) {
+        console.error('Error loading settings:', e);
+      }
+      return { ...DEFAULT_SETTINGS };
+    }
+
+    // Save settings to localStorage
+    function saveSettingsToStorage(settings) {
+      try {
+        localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+      } catch (e) {
+        console.error('Error saving settings:', e);
+      }
+    }
+
+    // Apply settings to the UI
+    let currentSettings = loadSettings();
+
+    function applyTheme(theme) {
+      if (theme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+    }
+
+    function applySettingsToForm(settings) {
+      document.getElementById('theme-select').value = settings.theme;
+      document.getElementById('precision-select').value = settings.decimalPrecision;
+      document.getElementById('default-tab-select').value = settings.defaultTab;
+    }
+
+    function switchTab(tabId) {
+      navButtons.forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-tab') === tabId);
+      });
+      tabContents.forEach(tc => {
+        tc.classList.toggle('active', tc.id === tabId);
+      });
+
+      if (tabId === 'colour-tab' && !hasGeneratedInitialArt) {
+        generateRandomPicture();
+        hasGeneratedInitialArt = true;
+      }
+    }
+
     // Tab switching logic
     const navButtons = document.querySelectorAll('.nav-btn');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -239,40 +497,45 @@
     navButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetTab = btn.getAttribute('data-tab');
-
-        navButtons.forEach(b => b.classList.remove('active'));
-        tabContents.forEach(tc => tc.classList.remove('active'));
-
-        btn.classList.add('active');
-        document.getElementById(targetTab).classList.add('active');
-
-        // Draw initial canvas if switching to colour tab for the first time
-        if (targetTab === 'colour-tab' && !hasGeneratedInitialArt) {
-          generateRandomPicture();
-          hasGeneratedInitialArt = true;
-        }
+        switchTab(targetTab);
       });
     });
 
     // Pure math utility functions embedded for frontend
+    function isValidNumber(value) {
+      return typeof value === 'number' && !Number.isNaN(value) && Number.isFinite(value);
+    }
+
     function calculatePower(base, exponent) {
-      if (typeof base !== 'number' || isNaN(base) || !isFinite(base)) {
+      if (!isValidNumber(base)) {
         throw new TypeError('Base must be a valid finite number.');
       }
-      if (typeof exponent !== 'number' || isNaN(exponent) || !isFinite(exponent)) {
+      if (!isValidNumber(exponent)) {
         throw new TypeError('Exponent must be a valid finite number.');
       }
       return Math.pow(base, exponent);
     }
 
     function calculateCircleArea(radius) {
-      if (typeof radius !== 'number' || isNaN(radius) || !isFinite(radius)) {
+      if (!isValidNumber(radius)) {
         throw new TypeError('Radius must be a valid finite number.');
       }
       if (radius < 0) {
         throw new RangeError('Radius cannot be negative.');
       }
       return Math.PI * radius * radius;
+    }
+
+    function formatNumberWithPrecision(num, precision) {
+      if (!isValidNumber(num)) {
+        throw new TypeError('Value must be a valid finite number.');
+      }
+      const precStr = String(precision);
+      if (precStr === 'auto' || !['0', '2', '4', '6'].includes(precStr)) {
+        return String(num);
+      }
+      const decimals = parseInt(precStr, 10);
+      return Number(num.toFixed(decimals)).toString();
     }
 
     // Exponent Calculator Handler
@@ -287,8 +550,9 @@
         const base = parseFloat(baseInput);
         const exponent = parseFloat(exponentInput);
         const res = calculatePower(base, exponent);
+        const formattedRes = formatNumberWithPrecision(res, currentSettings.decimalPrecision);
         resultContainer.className = 'result-box';
-        resultValue.textContent = `${base} ^ ${exponent} = ${res}`;
+        resultValue.textContent = `${base} ^ ${exponent} = ${formattedRes}`;
         resultContainer.style.display = 'block';
       } catch (err) {
         resultContainer.className = 'result-box error';
@@ -376,8 +640,9 @@
       try {
         const radius = parseFloat(radiusInput);
         const area = calculateCircleArea(radius);
+        const formattedArea = formatNumberWithPrecision(area, currentSettings.decimalPrecision);
         resultContainer.className = 'result-box';
-        resultValue.textContent = `Area (r = ${radius}) = ${area.toFixed(4)}`;
+        resultValue.textContent = `Area (r = ${radius}) = ${formattedArea}`;
         resultContainer.style.display = 'block';
       } catch (err) {
         resultContainer.className = 'result-box error';
@@ -385,6 +650,53 @@
         resultContainer.style.display = 'block';
       }
     });
+
+    // Settings Form Handlers
+    function showSettingsMessage(msg, isError = false) {
+      const msgBox = document.getElementById('settings-message');
+      const msgVal = document.getElementById('settings-message-value');
+      msgBox.className = isError ? 'result-box error' : 'result-box success';
+      msgVal.textContent = msg;
+      msgBox.style.display = 'block';
+
+      setTimeout(() => {
+        msgBox.style.display = 'none';
+      }, 3000);
+    }
+
+    document.getElementById('theme-select').addEventListener('change', function(e) {
+      applyTheme(e.target.value);
+    });
+
+    document.getElementById('settings-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const selectedTheme = document.getElementById('theme-select').value;
+      const selectedPrecision = document.getElementById('precision-select').value;
+      const selectedDefaultTab = document.getElementById('default-tab-select').value;
+
+      currentSettings = {
+        theme: selectedTheme,
+        decimalPrecision: selectedPrecision,
+        defaultTab: selectedDefaultTab
+      };
+
+      saveSettingsToStorage(currentSettings);
+      applyTheme(currentSettings.theme);
+      showSettingsMessage('Settings saved successfully!');
+    });
+
+    document.getElementById('reset-settings-btn').addEventListener('click', function() {
+      currentSettings = { ...DEFAULT_SETTINGS };
+      saveSettingsToStorage(currentSettings);
+      applyTheme(currentSettings.theme);
+      applySettingsToForm(currentSettings);
+      showSettingsMessage('Settings reset to defaults.');
+    });
+
+    // Initialize application with loaded settings
+    applyTheme(currentSettings.theme);
+    applySettingsToForm(currentSettings);
+    switchTab(currentSettings.defaultTab);
   </script>
 </body>
 </html>
