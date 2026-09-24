@@ -73,3 +73,19 @@ The tests verify:
 ## CI/CD Workflow
 
 GitHub Actions runs automated test checks on every `push` and `pull_request` targeting the `main` branch. The workflow installs dependencies and runs `npm test` across Node.js versions 18, 20, and 22.
+
+## Deployment to Netlify
+
+Automated deployments to Netlify are handled by the GitHub Actions workflow in `.github/workflows/deploy.yml`.
+
+### How It Works
+
+- **Trigger:** On every `push` to the `main` branch.
+- **Process:** The workflow checks out the repository, sets up Node.js, installs dependencies, runs the test suite (`npm test`), and deploys the web application assets in the `public/` directory directly to production on Netlify using Netlify CLI.
+
+### Required Secrets
+
+To enable Netlify deployment in your repository, configure the following secrets in **Settings > Secrets and variables > Actions**:
+
+- `NETLIFY_AUTH_TOKEN`: Personal access token generated from your Netlify account settings (User Settings > Applications > Personal Access Tokens).
+- `NETLIFY_SITE_ID`: The API ID of your Netlify site (Site Settings > General > Site Details > API ID).
