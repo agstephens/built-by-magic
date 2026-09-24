@@ -2,6 +2,8 @@
 
 A Node.js starter project configured for automated AI development, providing mathematical utility functions and an automated testing suite.
 
+**Live Application:** [https://builtbymagic.netlify.app/](https://builtbymagic.netlify.app/)
+
 ## Features
 
 - Exponential calculation utility function (`calculatePower`)
@@ -81,7 +83,14 @@ Automated deployments to Netlify are handled by the GitHub Actions workflow in `
 ### How It Works
 
 - **Trigger:** On every `push` to the `main` branch.
+- **Environment:** The deployment job is associated with the **`Deployment CI`** GitHub environment (`environment: "Deployment CI"` in `.github/workflows/deploy.yml`).
 - **Process:** The workflow checks out the repository, sets up Node.js, installs dependencies, runs the test suite (`npm test`), and deploys the web application assets in the `public/` directory directly to production on Netlify using Netlify CLI.
+
+### Viewing Environment & Deployments
+
+You can view the environment status and deployment history directly on GitHub:
+- Go to the repository's main page on GitHub and check the **Environments** section on the right sidebar (or navigate to **Deployments** / **Environments**).
+- Click on **Deployment CI** to view deployment status, execution logs, and active environment history.
 
 ### Required Secrets
 
