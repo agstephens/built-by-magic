@@ -6,8 +6,19 @@ A Node.js starter project configured for automated AI development, providing mat
 
 - Exponential calculation utility function (`calculatePower`)
 - Input validation utilities
+- Web-based calculator interface (`public/index.html`)
 - Unit tests using Jest
 - Continuous Integration workflow via GitHub Actions
+
+## Frontend Screenshots
+
+Here is the application front end in action:
+
+### Initial View
+![Calculator Initial View](assets/screenshots/app_initial.png)
+
+### Calculation Result
+![Calculator Result View](assets/screenshots/app_result.png)
 
 ## Requirements
 
