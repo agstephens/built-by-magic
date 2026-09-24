@@ -1,0 +1,49 @@
+name: Clean up Netlify preview
+
+on:
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    environment: "Deployment CI"
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Delete preview deploys
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          ALIAS: pr-${{ github.event.number }}
+        run: |
+          api="https://api.netlify.com/api/v1"
+          auth="Authorization: Bearer $NETLIFY_AUTH_TOKEN"
+
+          # Collect all deploy IDs for this alias first, so deleting doesn't shift pagination
+          ids=""
+          page=1
+          while :; do
+            batch=$(curl -fsS -H "$auth" \
+              "$api/sites/$NETLIFY_SITE_ID/deploys?branch=$ALIAS&per_page=100&page=$page")
+            [ "$(echo "$batch" | jq 'length')" -eq 0 ] && break
+            ids="$ids $(echo "$batch" | jq -r --arg a "$ALIAS" '.[] | select(.branch == $a) | .id')"
+            page=$((page + 1))
+          done
+
+          count=0
+          for id in $ids; do
+            echo "Deleting deploy $id"
+            curl -fsS -X DELETE -H "$auth" "$api/sites/$NETLIFY_SITE_ID/deploys/$id"
+            count=$((count + 1))
+          done
+          echo "Deleted $count deploy(s) for $ALIAS"
+
+      - name: Update PR comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment ${{ github.event.number }} --repo ${{ github.repository }} \
+            --edit-last --create-if-none \
+            --body "🧹 Preview for this PR has been removed from Netlify."
