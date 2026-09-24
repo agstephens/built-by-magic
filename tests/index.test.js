@@ -1,4 +1,4 @@
-const { calculatePower } = require('../src/index');
+const { calculatePower, calculateCircleArea } = require('../src/index');
 
 describe('calculatePower', () => {
   test('calculates positive base and positive exponent correctly', () => {
@@ -42,5 +42,30 @@ describe('calculatePower', () => {
     expect(() => calculatePower(2, undefined)).toThrow(TypeError);
     expect(() => calculatePower(2, NaN)).toThrow(TypeError);
     expect(() => calculatePower(2, Infinity)).toThrow(TypeError);
+  });
+});
+
+describe('calculateCircleArea', () => {
+  test('calculates circle area correctly for positive radius', () => {
+    expect(calculateCircleArea(1)).toBeCloseTo(Math.PI);
+    expect(calculateCircleArea(5)).toBeCloseTo(Math.PI * 25);
+    expect(calculateCircleArea(2.5)).toBeCloseTo(Math.PI * 6.25);
+  });
+
+  test('calculates area as 0 when radius is 0', () => {
+    expect(calculateCircleArea(0)).toBe(0);
+  });
+
+  test('throws RangeError when radius is negative', () => {
+    expect(() => calculateCircleArea(-1)).toThrow(RangeError);
+    expect(() => calculateCircleArea(-5.5)).toThrow(RangeError);
+  });
+
+  test('throws TypeError when radius is invalid', () => {
+    expect(() => calculateCircleArea('5')).toThrow(TypeError);
+    expect(() => calculateCircleArea(null)).toThrow(TypeError);
+    expect(() => calculateCircleArea(undefined)).toThrow(TypeError);
+    expect(() => calculateCircleArea(NaN)).toThrow(TypeError);
+    expect(() => calculateCircleArea(Infinity)).toThrow(TypeError);
   });
 });
