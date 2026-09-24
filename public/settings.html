@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Exponential Calculator</title>
+  <style>
+    :root {
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --heading-color: #1a1a1a;
+      --label-color: #555555;
+      --border-color: #cccccd;
+      --primary-color: #0066cc;
+      --primary-hover: #0052a3;
+      --nav-bg: #eef4fc;
+      --nav-link: #0066cc;
+      --nav-link-active: #004080;
+      --success-bg: #e6fffa;
+      --success-border: #319795;
+      --success-text: #234e52;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #e0e0e0;
+      --heading-color: #ffffff;
+      --label-color: #bbbbbb;
+      --border-color: #444444;
+      --primary-color: #3182ce;
+      --primary-hover: #2b6cb0;
+      --nav-bg: #2d3748;
+      --nav-link: #63b3ed;
+      --nav-link-active: #90cdf4;
+      --success-bg: #1c453b;
+      --success-border: #319795;
+      --success-text: #e6fffa;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .nav {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      justify-content: space-between;
+      background: var(--nav-bg);
+      padding: 10px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+
+    .nav a {
+      color: var(--nav-link);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .nav a.active {
+      color: var(--nav-link-active);
+      text-decoration: underline;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 32px;
+      width: 100%;
+      max-width: 480px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 24px;
+      color: var(--heading-color);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--label-color);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    button.secondary {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+    }
+
+    button.secondary:hover {
+      background-color: var(--nav-bg);
+    }
+
+    .toast {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 6px;
+      background-color: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+      text-align: center;
+      font-size: 14px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html">← Calculator</a>
+    <a href="settings.html" class="active">Settings</a>
+  </nav>
+
+  <div class="card">
+    <h1>Preferences & Settings</h1>
+    <form id="settings-form">
+      <div class="form-group">
+        <label for="theme">Theme Choice</label>
+        <select id="theme">
+          <option value="system">System Default</option>
+          <option value="light">Light Mode</option>
+          <option value="dark">Dark Mode</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="precision">Decimal Precision</label>
+        <select id="precision">
+          <option value="auto">Auto (Full Precision)</option>
+          <option value="0">0 Decimals</option>
+          <option value="2">2 Decimals</option>
+          <option value="4">4 Decimals</option>
+          <option value="6">6 Decimals</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="notation">Number Notation</label>
+        <select id="notation">
+          <option value="standard">Standard</option>
+          <option value="scientific">Scientific Notation</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="defaultBase">Default Base Input</label>
+        <input type="number" id="defaultBase" step="any" placeholder="Optional default base (e.g. 2)">
+      </div>
+
+      <div class="form-group">
+        <label for="defaultExponent">Default Exponent Input</label>
+        <input type="number" id="defaultExponent" step="any" placeholder="Optional default exponent (e.g. 8)">
+      </div>
+
+      <div class="button-group">
+        <button type="submit" id="save-btn">Save Settings</button>
+        <button type="button" id="reset-btn" class="secondary">Reset Defaults</button>
+      </div>
+    </form>
+    <div id="toast" class="toast">Settings saved successfully!</div>
+  </div>
+
+  <script>
+    const DEFAULT_SETTINGS = {
+      theme: 'system',
+      precision: 'auto',
+      notation: 'standard',
+      defaultBase: '',
+      defaultExponent: '',
+    };
+
+    function loadSettings() {
+      try {
+        const saved = localStorage.getItem('app_settings');
+        return saved ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) } : { ...DEFAULT_SETTINGS };
+      } catch (e) {
+        return { ...DEFAULT_SETTINGS };
+      }
+    }
+
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      }
+    }
+
+    function populateForm(settings) {
+      document.getElementById('theme').value = settings.theme || 'system';
+      document.getElementById('precision').value = settings.precision !== undefined ? String(settings.precision) : 'auto';
+      document.getElementById('notation').value = settings.notation || 'standard';
+      document.getElementById('defaultBase').value = settings.defaultBase !== undefined ? settings.defaultBase : '';
+      document.getElementById('defaultExponent').value = settings.defaultExponent !== undefined ? settings.defaultExponent : '';
+      applyTheme(settings.theme);
+    }
+
+    const currentSettings = loadSettings();
+    populateForm(currentSettings);
+
+    document.getElementById('theme').addEventListener('change', function(e) {
+      applyTheme(e.target.value);
+    });
+
+    document.getElementById('settings-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const settings = {
+        theme: document.getElementById('theme').value,
+        precision: document.getElementById('precision').value === 'auto' ? 'auto' : parseInt(document.getElementById('precision').value, 10),
+        notation: document.getElementById('notation').value,
+        defaultBase: document.getElementById('defaultBase').value,
+        defaultExponent: document.getElementById('defaultExponent').value,
+      };
+
+      localStorage.setItem('app_settings', JSON.stringify(settings));
+      applyTheme(settings.theme);
+
+      const toast = document.getElementById('toast');
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2500);
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', function() {
+      localStorage.removeItem('app_settings');
+      populateForm(DEFAULT_SETTINGS);
+
+      const toast = document.getElementById('toast');
+      toast.textContent = 'Settings reset to defaults!';
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.textContent = 'Settings saved successfully!';
+        toast.style.display = 'none';
+      }, 2500);
+    });
+  </script>
+</body>
+</html>
