@@ -3,11 +3,20 @@ name: Deploy to Netlify
 on:
   push:
     branches: [ main ]
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+concurrency:
+  group: deploy-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: "Deployment CI"
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -25,8 +34,28 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Deploy to Netlify
+      - name: Deploy to Netlify (production)
+        if: github.event_name == 'push'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: npx netlify-cli deploy --dir=public --prod
+
+      - name: Deploy to Netlify (PR preview)
+        if: github.event_name == 'pull_request'
+        id: preview
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          url=$(npx netlify-cli deploy --dir=public --alias pr-${{ github.event.number }} --json | jq -r '.deploy_url')
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Comment preview URL on PR
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment ${{ github.event.number }} --repo ${{ github.repository }} \
+            --edit-last --create-if-none \
+            --body "🔍 Preview deployed: ${{ steps.preview.outputs.url }} (commit ${{ github.event.pull_request.head.sha }})"
