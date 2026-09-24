@@ -3,17 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exponential Calculator</title>
+  <title>Multi-Utility Tool Hub</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: #f4f6f9;
       color: #333;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       min-height: 100vh;
       margin: 0;
+      padding: 20px 10px;
+    }
+    nav.top-nav {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: 520px;
+      justify-content: center;
+    }
+    .nav-btn {
+      flex: 1;
+      padding: 10px 12px;
+      background: transparent;
+      color: #555;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .nav-btn:hover {
+      background-color: #eef6ff;
+      color: #0066cc;
+    }
+    .nav-btn.active {
+      background-color: #0066cc;
+      color: white;
     }
     .card {
       background: #ffffff;
@@ -21,7 +58,13 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       padding: 32px;
       width: 100%;
-      max-width: 420px;
+      max-width: 520px;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
     }
     h1 {
       margin-top: 0;
@@ -33,6 +76,13 @@
     .form-group {
       margin-bottom: 20px;
     }
+    .color-inputs {
+      display: flex;
+      gap: 16px;
+    }
+    .color-inputs .form-group {
+      flex: 1;
+    }
     label {
       display: block;
       font-weight: 600;
@@ -40,20 +90,28 @@
       font-size: 14px;
       color: #555;
     }
-    input {
+    input[type="number"], input[type="text"] {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 16px;
-      box-sizing: border-box;
       transition: border-color 0.2s;
+    }
+    input[type="color"] {
+      width: 100%;
+      height: 44px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 4px;
+      cursor: pointer;
+      background: #fff;
     }
     input:focus {
       outline: none;
       border-color: #0066cc;
     }
-    button {
+    button.action-btn {
       width: 100%;
       padding: 12px;
       background-color: #0066cc;
@@ -65,7 +123,7 @@
       cursor: pointer;
       transition: background-color 0.2s;
     }
-    button:hover {
+    button.action-btn:hover {
       background-color: #0052a3;
     }
     .result-box {
@@ -97,29 +155,106 @@
       color: #9b1c1c;
       font-size: 16px;
     }
+    canvas#colour-canvas {
+      display: block;
+      margin: 20px auto 0;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      background-color: #ffffff;
+      max-width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 <body>
+  <nav class="top-nav">
+    <button class="nav-btn active" data-tab="exponent-tab">Exponent</button>
+    <button class="nav-btn" data-tab="colour-tab">Colour Tool</button>
+    <button class="nav-btn" data-tab="circle-tab">Circle Area</button>
+  </nav>
+
   <div class="card">
-    <h1>Exponential Calculator</h1>
-    <form id="calc-form">
-      <div class="form-group">
-        <label for="base">Base Number</label>
-        <input type="number" id="base" step="any" placeholder="e.g. 2" required>
+    <!-- Exponent Calculator Tool -->
+    <div id="exponent-tab" class="tab-content active">
+      <h1>Exponential Calculator</h1>
+      <form id="calc-form">
+        <div class="form-group">
+          <label for="base">Base Number</label>
+          <input type="number" id="base" step="any" placeholder="e.g. 2" required>
+        </div>
+        <div class="form-group">
+          <label for="exponent">Exponent</label>
+          <input type="number" id="exponent" step="any" placeholder="e.g. 8" required>
+        </div>
+        <button type="submit" class="action-btn" id="calculate-btn">Calculate</button>
+      </form>
+      <div id="result-container" class="result-box" style="display: none;">
+        <div class="result-title">Result</div>
+        <div id="result-value" class="result-value"></div>
       </div>
-      <div class="form-group">
-        <label for="exponent">Exponent</label>
-        <input type="number" id="exponent" step="any" placeholder="e.g. 8" required>
+    </div>
+
+    <!-- Graphical Colour Tool -->
+    <div id="colour-tab" class="tab-content">
+      <h1>Colour Art Generator</h1>
+      <form id="colour-form">
+        <div class="color-inputs">
+          <div class="form-group">
+            <label for="color1">Colour 1</label>
+            <input type="color" id="color1" value="#ff5722">
+          </div>
+          <div class="form-group">
+            <label for="color2">Colour 2</label>
+            <input type="color" id="color2" value="#00bcd4">
+          </div>
+        </div>
+        <button type="submit" class="action-btn" id="generate-art-btn">Generate Picture</button>
+      </form>
+      <canvas id="colour-canvas" width="400" height="300"></canvas>
+    </div>
+
+    <!-- Circle Area Calculator Tool -->
+    <div id="circle-tab" class="tab-content">
+      <h1>Circle Area Calculator</h1>
+      <form id="circle-form">
+        <div class="form-group">
+          <label for="radius">Radius</label>
+          <input type="number" id="radius" step="any" min="0" placeholder="e.g. 5" required>
+        </div>
+        <button type="submit" class="action-btn" id="circle-btn">Calculate Area</button>
+      </form>
+      <div id="circle-result-container" class="result-box" style="display: none;">
+        <div class="result-title">Result</div>
+        <div id="circle-result-value" class="result-value"></div>
       </div>
-      <button type="submit" id="calculate-btn">Calculate</button>
-    </form>
-    <div id="result-container" class="result-box" style="display: none;">
-      <div class="result-title">Result</div>
-      <div id="result-value" class="result-value"></div>
     </div>
   </div>
 
   <script>
+    // Tab switching logic
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.getAttribute('data-tab');
+
+        navButtons.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(tc => tc.classList.remove('active'));
+
+        btn.classList.add('active');
+        document.getElementById(targetTab).classList.add('active');
+
+        // Draw initial canvas if switching to colour tab for the first time
+        if (targetTab === 'colour-tab' && !hasGeneratedInitialArt) {
+          generateRandomPicture();
+          hasGeneratedInitialArt = true;
+        }
+      });
+    });
+
+    // Pure math utility functions embedded for frontend
     function calculatePower(base, exponent) {
       if (typeof base !== 'number' || isNaN(base) || !isFinite(base)) {
         throw new TypeError('Base must be a valid finite number.');
@@ -130,6 +265,17 @@
       return Math.pow(base, exponent);
     }
 
+    function calculateCircleArea(radius) {
+      if (typeof radius !== 'number' || isNaN(radius) || !isFinite(radius)) {
+        throw new TypeError('Radius must be a valid finite number.');
+      }
+      if (radius < 0) {
+        throw new RangeError('Radius cannot be negative.');
+      }
+      return Math.PI * radius * radius;
+    }
+
+    // Exponent Calculator Handler
     document.getElementById('calc-form').addEventListener('submit', function(e) {
       e.preventDefault();
       const baseInput = document.getElementById('base').value;
@@ -143,6 +289,95 @@
         const res = calculatePower(base, exponent);
         resultContainer.className = 'result-box';
         resultValue.textContent = `${base} ^ ${exponent} = ${res}`;
+        resultContainer.style.display = 'block';
+      } catch (err) {
+        resultContainer.className = 'result-box error';
+        resultValue.textContent = err.message;
+        resultContainer.style.display = 'block';
+      }
+    });
+
+    // Graphical Colour Tool Handler
+    let hasGeneratedInitialArt = false;
+
+    function generateRandomPicture() {
+      const color1 = document.getElementById('color1').value;
+      const color2 = document.getElementById('color2').value;
+      const canvas = document.getElementById('colour-canvas');
+      const ctx = canvas.getContext('2d');
+
+      const width = canvas.width;
+      const height = canvas.height;
+
+      // Background gradient blending color1 and color2
+      const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+      bgGradient.addColorStop(0, color1);
+      bgGradient.addColorStop(1, color2);
+      ctx.fillStyle = bgGradient;
+      ctx.fillRect(0, 0, width, height);
+
+      // Random artwork geometric shapes (circles, lines, triangles)
+      const numShapes = 20 + Math.floor(Math.random() * 20);
+
+      for (let i = 0; i < numShapes; i++) {
+        const choice = Math.floor(Math.random() * 3);
+        const useColor1 = Math.random() > 0.5;
+        const color = useColor1 ? color1 : color2;
+        const alpha = (0.2 + Math.random() * 0.6).toFixed(2);
+
+        ctx.save();
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
+        ctx.globalAlpha = parseFloat(alpha);
+
+        const cx = Math.random() * width;
+        const cy = Math.random() * height;
+
+        if (choice === 0) {
+          // Circle
+          const r = 10 + Math.random() * 60;
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (choice === 1) {
+          // Polygon / Triangle
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(cx + (Math.random() * 80 - 40), cy + (Math.random() * 80 - 40));
+          ctx.lineTo(cx + (Math.random() * 80 - 40), cy + (Math.random() * 80 - 40));
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          // Line / Ribbon
+          ctx.lineWidth = 2 + Math.random() * 8;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(cx + (Math.random() * 120 - 60), cy + (Math.random() * 120 - 60));
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+    }
+
+    document.getElementById('colour-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      generateRandomPicture();
+      hasGeneratedInitialArt = true;
+    });
+
+    // Circle Area Calculator Handler
+    document.getElementById('circle-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const radiusInput = document.getElementById('radius').value;
+      const resultContainer = document.getElementById('circle-result-container');
+      const resultValue = document.getElementById('circle-result-value');
+
+      try {
+        const radius = parseFloat(radiusInput);
+        const area = calculateCircleArea(radius);
+        resultContainer.className = 'result-box';
+        resultValue.textContent = `Area (r = ${radius}) = ${area.toFixed(4)}`;
         resultContainer.style.display = 'block';
       } catch (err) {
         resultContainer.className = 'result-box error';

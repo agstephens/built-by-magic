@@ -18,6 +18,24 @@ function calculatePower(base, exponent) {
   return Math.pow(base, exponent);
 }
 
+/**
+ * Calculates the area of a circle with the given radius.
+ * @param {number} radius - The radius of the circle.
+ * @returns {number} The area of the circle.
+ * @throws {TypeError|RangeError} If radius is not a valid finite number or is negative.
+ */
+function calculateCircleArea(radius) {
+  if (!isValidNumber(radius)) {
+    throw new TypeError('Radius must be a valid finite number.');
+  }
+  if (radius < 0) {
+    throw new RangeError('Radius cannot be negative.');
+  }
+
+  return Math.PI * radius * radius;
+}
+
 module.exports = {
   calculatePower,
+  calculateCircleArea,
 };
