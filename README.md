@@ -1,5 +1,7 @@
 # built-by-magic
 
+**Live Application URL:** https://builtbymagic.netlify.app/
+
 A Node.js starter project configured for automated AI development, providing mathematical utility functions and an automated testing suite.
 
 ## Features
@@ -78,6 +80,11 @@ GitHub Actions runs automated test checks on every `push` and `pull_request` tar
 
 Automated deployments to Netlify are handled by the GitHub Actions workflow in `.github/workflows/deploy.yml`.
 
+### Environment & Configuration
+
+- **Environment:** The deployment job runs under the GitHub Environment named `Deployment CI` (`environment: "Deployment CI"`).
+- **Viewing Environment & Secrets:** You can view and configure the deployment environment, its protection rules, and secrets in GitHub under **Settings > Environments > Deployment CI** (or **Settings > Secrets and variables > Actions** for repository secrets).
+
 ### How It Works
 
 - **Trigger:** On every `push` to the `main` branch.
@@ -85,7 +92,7 @@ Automated deployments to Netlify are handled by the GitHub Actions workflow in `
 
 ### Required Secrets
 
-To enable Netlify deployment in your repository, configure the following secrets in **Settings > Secrets and variables > Actions**:
+To enable Netlify deployment in your repository, configure the following secrets in **Settings > Environments > Deployment CI** (or repository secrets in **Settings > Secrets and variables > Actions**):
 
 - `NETLIFY_AUTH_TOKEN`: Personal access token generated from your Netlify account settings (User Settings > Applications > Personal Access Tokens).
 - `NETLIFY_SITE_ID`: The API ID of your Netlify site (Site Settings > General > Site Details > API ID).
