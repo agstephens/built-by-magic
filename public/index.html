@@ -144,7 +144,7 @@
       gap: 8px;
       margin-bottom: 24px;
       width: 100%;
-      max-width: 520px;
+      max-width: 600px;
       justify-content: center;
       transition: background-color 0.3s ease;
     }
@@ -175,7 +175,7 @@
       box-shadow: 0 4px 20px var(--card-shadow);
       padding: 32px;
       width: 100%;
-      max-width: 520px;
+      max-width: 600px;
       transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
     .tab-content {
@@ -190,6 +190,14 @@
       color: var(--heading-color);
       text-align: center;
       margin-bottom: 24px;
+    }
+    p.description {
+      font-size: 14px;
+      color: var(--label-color);
+      text-align: center;
+      margin-top: -16px;
+      margin-bottom: 24px;
+      line-height: 1.5;
     }
     .form-group {
       margin-bottom: 20px;
@@ -295,6 +303,15 @@
       font-weight: bold;
       color: var(--result-value);
     }
+    .austen-output {
+      font-size: 16px;
+      font-weight: normal;
+      text-align: left;
+      line-height: 1.6;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-style: italic;
+      color: var(--text-color);
+    }
     .result-box.error .result-value {
       color: var(--error-text);
       font-size: 16px;
@@ -320,6 +337,7 @@
     <button class="nav-btn active" data-tab="exponent-tab">Exponent</button>
     <button class="nav-btn" data-tab="colour-tab">Colour Tool</button>
     <button class="nav-btn" data-tab="circle-tab">Circle Area</button>
+    <button class="nav-btn" data-tab="austen-tab">Austen Writer</button>
     <button class="nav-btn" data-tab="settings-tab">Settings</button>
   </nav>
 
@@ -379,6 +397,21 @@
       </div>
     </div>
 
+    <!-- Austen Writer Tool -->
+    <div id="austen-tab" class="tab-content">
+      <h1>Austen Writer</h1>
+      <p class="description">Generate paragraphs in the style of Jane Austen's <em>Pride and Prejudice</em> using N-gram language models.</p>
+      <div class="button-group">
+        <button type="button" class="action-btn" id="austen-bigram-btn">bigram</button>
+        <button type="button" class="action-btn" id="austen-trigram-btn">trigram</button>
+        <button type="button" class="action-btn" id="austen-tetragram-btn">tetragram</button>
+      </div>
+      <div id="austen-result-container" class="result-box" style="display: none;">
+        <div class="result-title" id="austen-result-title">Generated Paragraph</div>
+        <div id="austen-result-value" class="austen-output"></div>
+      </div>
+    </div>
+
     <!-- Settings Tool -->
     <div id="settings-tab" class="tab-content">
       <h1>Preferences & Settings</h1>
@@ -408,6 +441,7 @@
             <option value="exponent-tab">Exponential Calculator</option>
             <option value="colour-tab">Colour Art Generator</option>
             <option value="circle-tab">Circle Area Calculator</option>
+            <option value="austen-tab">Austen Writer</option>
             <option value="settings-tab">Settings</option>
           </select>
         </div>
@@ -441,7 +475,7 @@
           return {
             theme: ['light', 'dark', 'ocean', 'forest'].includes(parsed.theme) ? parsed.theme : DEFAULT_SETTINGS.theme,
             decimalPrecision: ['auto', '0', '2', '4', '6'].includes(String(parsed.decimalPrecision)) ? String(parsed.decimalPrecision) : DEFAULT_SETTINGS.decimalPrecision,
-            defaultTab: ['exponent-tab', 'colour-tab', 'circle-tab', 'settings-tab'].includes(parsed.defaultTab) ? parsed.defaultTab : DEFAULT_SETTINGS.defaultTab
+            defaultTab: ['exponent-tab', 'colour-tab', 'circle-tab', 'austen-tab', 'settings-tab'].includes(parsed.defaultTab) ? parsed.defaultTab : DEFAULT_SETTINGS.defaultTab
           };
         }
       } catch (e) {
@@ -650,6 +684,130 @@
         resultContainer.style.display = 'block';
       }
     });
+
+    // Austen Writer Frontend Logic
+    let austenSourceText = null;
+    let austenTokens = null;
+    const austenNGramModels = {};
+
+    async function getAustenTokens() {
+      if (austenTokens) return austenTokens;
+
+      if (!austenSourceText) {
+        const localPath = 'data/pride_and_prejudice.txt';
+        const remoteUrl = 'https://www.gutenberg.org/files/1342/1342-0.txt';
+
+        try {
+          const res = await fetch(localPath);
+          if (!res.ok) throw new Error('Local fetch failed');
+          austenSourceText = await res.text();
+        } catch (e) {
+          const res = await fetch(remoteUrl);
+          if (!res.ok) throw new Error('Remote fetch failed');
+          austenSourceText = await res.text();
+        }
+      }
+
+      let cleanText = austenSourceText;
+      const startIdx = cleanText.indexOf('*** START OF THE PROJECT GUTENBERG EBOOK');
+      const endIdx = cleanText.indexOf('*** END OF THE PROJECT GUTENBERG EBOOK');
+      if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+        cleanText = cleanText.substring(startIdx, endIdx);
+      }
+
+      austenTokens = cleanText.match(/[A-Za-z0-9]+['\u2019]?[A-Za-z0-9]*|[.!?]/g) || [];
+      return austenTokens;
+    }
+
+    async function getAustenNGramModel(n) {
+      if (austenNGramModels[n]) return austenNGramModels[n];
+
+      const tokens = await getAustenTokens();
+      const model = {};
+      for (let i = 0; i <= tokens.length - n; i++) {
+        const key = tokens.slice(i, i + n - 1).map(t => t.toLowerCase()).join(' ');
+        const nextToken = tokens[i + n - 1];
+        if (!model[key]) model[key] = [];
+        model[key].push(nextToken);
+      }
+
+      austenNGramModels[n] = model;
+      return model;
+    }
+
+    async function generateAustenParagraph(type) {
+      const resultContainer = document.getElementById('austen-result-container');
+      const resultTitle = document.getElementById('austen-result-title');
+      const resultValue = document.getElementById('austen-result-value');
+
+      resultContainer.className = 'result-box';
+      resultTitle.textContent = `Generating ${type}...`;
+      resultValue.textContent = 'Loading Pride and Prejudice source text and building model...';
+      resultContainer.style.display = 'block';
+
+      try {
+        const nMap = { bigram: 2, trigram: 3, tetragram: 4 };
+        const n = nMap[type] || 2;
+        const model = await getAustenNGramModel(n);
+
+        const keys = Object.keys(model);
+        if (keys.length === 0) {
+          throw new Error('Could not generate model from source text.');
+        }
+
+        let currentKey = keys[Math.floor(Math.random() * keys.length)];
+        const words = currentKey.split(' ');
+        let sentences = 0;
+        let maxTokens = 350;
+
+        while (sentences < 5 && maxTokens-- > 0) {
+          const options = model[currentKey];
+          if (!options || options.length === 0) {
+            currentKey = keys[Math.floor(Math.random() * keys.length)];
+            continue;
+          }
+
+          const nextWord = options[Math.floor(Math.random() * options.length)];
+          words.push(nextWord);
+
+          if (['.', '!', '?'].includes(nextWord)) {
+            sentences++;
+          }
+
+          const keyWords = words.slice(-(n - 1)).map(w => w.toLowerCase());
+          currentKey = keyWords.join(' ');
+        }
+
+        // Format paragraph
+        let paragraph = '';
+        let capitalizeNext = true;
+
+        for (let i = 0; i < words.length; i++) {
+          let word = words[i];
+          if (['.', '!', '?'].includes(word)) {
+            paragraph += word;
+            capitalizeNext = true;
+          } else {
+            if (capitalizeNext) {
+              word = word.charAt(0).toUpperCase() + word.slice(1);
+              capitalizeNext = false;
+            }
+            paragraph += (paragraph.length > 0 && !paragraph.endsWith(' ') ? ' ' : '') + word;
+          }
+        }
+
+        resultTitle.textContent = `Austen Writer (${type})`;
+        resultValue.textContent = paragraph;
+      } catch (err) {
+        resultContainer.className = 'result-box error';
+        resultTitle.textContent = 'Error';
+        resultValue.textContent = err.message || 'Failed to generate paragraph.';
+      }
+    }
+
+    document.getElementById('austen-bigram-btn').addEventListener('click', () => generateAustenParagraph('bigram'));
+    document.getElementById('austen-trigram-btn').addEventListener('click', () => generateAustenParagraph('trigram'));
+    document.getElementById('austen-tetragram-btn').addEventListener('click', () => generateAustenParagraph('tetragram'));
 
     // Settings Form Handlers
     function showSettingsMessage(msg, isError = false) {
