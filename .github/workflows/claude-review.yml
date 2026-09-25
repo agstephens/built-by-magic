@@ -1,0 +1,45 @@
+name: Claude Code PR Reviewer
+
+on:
+  pull_request:
+    # Trigger when a PR is opened, updated with new commits, or marked ready for review
+    types: [opened, synchronize, ready_for_review]
+
+jobs:
+  claude-pr-review:
+    # Skip draft PRs so it only reviews when the PR is fully created/ready
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    environment: "Deployment CI"
+
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches full git history so Claude can inspect diffs against main
+
+      - name: Run Claude Code PR Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            You are performing an automated code review on this Pull Request diff.
+
+            Please evaluate the changes carefully:
+            1. **Correctness & Logic:** Are there any bugs, off-by-one errors, or edge-case failures?
+            2. **Security:** Are there exposed secrets, missing input validation, or injection vulnerabilities?
+            3. **Test Coverage:** Are unit or integration tests included/updated for the new functionality?
+            4. **Maintainability:** Is the code clean, readable, and compliant with standard conventions?
+
+            **Formatting Guidelines:**
+            - Start with a clear 1-paragraph summary of what the PR accomplishes.
+            - Provide actionable feedback with specific file names and line numbers where appropriate.
+            - Conclude with a clear status line:
+              - Write "STATUS: APPROVED" if the PR is safe to merge.
+              - Write "STATUS: CHANGES_REQUESTED" if there are critical bugs or missing tests that must be fixed.
