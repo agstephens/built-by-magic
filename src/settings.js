@@ -8,7 +8,7 @@ const DEFAULT_SETTINGS = Object.freeze({
 
 const VALID_THEMES = ['light', 'dark', 'ocean', 'forest'];
 const VALID_PRECISION_OPTIONS = ['auto', '0', '2', '4', '6'];
-const VALID_DEFAULT_TABS = ['exponent-tab', 'colour-tab', 'circle-tab', 'settings-tab'];
+const VALID_DEFAULT_TABS = ['exponent-tab', 'colour-tab', 'circle-tab', 'austen-tab', 'settings-tab'];
 
 /**
  * Validates and sanitizes settings object.
