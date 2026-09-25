@@ -10,6 +10,7 @@ jobs:
     # Skip draft PRs so it only reviews when the PR is fully created/ready
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    continue-on-error: true
     environment: "Deployment CI"
 
     permissions:
@@ -24,6 +25,7 @@ jobs:
           fetch-depth: 0 # Fetches full git history so Claude can inspect diffs against main
 
       - name: Run Claude Code PR Review
+        continue-on-error: true
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}

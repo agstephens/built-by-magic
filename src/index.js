@@ -7,6 +7,13 @@ const {
   validateSettings,
   formatNumberWithPrecision,
 } = require('./settings');
+const {
+  generateAustenText,
+  tokenizeText,
+  buildNGramModel,
+  fetchOrGetSourceText,
+  clearCache,
+} = require('./austenWriter');
 
 /**
  * Calculates base raised to the power of exponent (base^exponent).
@@ -46,6 +53,11 @@ function calculateCircleArea(radius) {
 module.exports = {
   calculatePower,
   calculateCircleArea,
+  generateAustenText,
+  tokenizeText,
+  buildNGramModel,
+  fetchOrGetSourceText,
+  clearCache,
   DEFAULT_SETTINGS,
   VALID_THEMES,
   VALID_PRECISION_OPTIONS,

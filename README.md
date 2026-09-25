@@ -2,15 +2,29 @@
 
 **Live Application URL:** https://builtbymagic.netlify.app/
 
-A Node.js starter project configured for automated AI development, providing mathematical utility functions and an automated testing suite.
+A Node.js starter project configured for automated AI development, providing mathematical, creative, and textual utility functions alongside an automated testing suite and web interface.
 
-## Features
+## App Functions & Features
 
-- Exponential calculation utility function (`calculatePower`)
-- Input validation utilities
-- Web-based calculator interface (`public/index.html`)
-- Unit tests using Jest
-- Continuous Integration workflow via GitHub Actions
+The application features four main functions accessible via both Node.js exports and the web interface (`public/index.html`):
+
+1. **Exponential Calculator (`calculatePower`)**
+   - Calculates mathematical powers ($base^{exponent}$) supporting positive, negative, zero, and fractional exponents.
+   - Includes input validation to ensure valid finite numbers.
+
+2. **Circle Area Calculator (`calculateCircleArea`)**
+   - Computes the geometric area of a circle ($\pi r^2$) for any non-negative radius.
+   - Throws descriptive errors for negative or non-numeric inputs.
+
+3. **Colour Art Generator**
+   - Generates generative canvas artwork by blending user-selected color palettes with randomized geometric shapes, circles, polygons, and ribbons.
+
+4. **Austen Writer (`generateAustenText`)**
+   - Generates paragraphs (approximately 5 sentences long) in the style of Jane Austen using N-gram language modeling (bigrams, trigrams, tetragrams).
+   - Automatically downloads and caches the full source text of *Pride and Prejudice* from Project Gutenberg (`https://www.gutenberg.org/files/1342/1342-0.txt`).
+   - Caches tokenized text and N-gram frequency models for fast response times.
+
+Additionally, the app includes a **Preferences & Settings** panel allowing users to customize themes (Light, Dark, Ocean Blue, Forest Green), decimal precision formatting, and startup tabs.
 
 ## Frontend Screenshots
 
@@ -42,15 +56,27 @@ Here is the application front end in action:
 
 ## Usage
 
-You can import and use `calculatePower` from `src/index.js`:
+You can import and use utilities from `src/index.js`:
 
 ```javascript
-const { calculatePower } = require('./src/index');
+const {
+  calculatePower,
+  calculateCircleArea,
+  generateAustenText
+} = require('./src/index');
 
-// Example usage:
+// 1. Exponential calculation
 console.log(calculatePower(2, 3)); // Outputs: 8
-console.log(calculatePower(5, 0)); // Outputs: 1
-console.log(calculatePower(4, 0.5)); // Outputs: 2
+
+// 2. Circle area calculation
+console.log(calculateCircleArea(5)); // Outputs: 78.5398...
+
+// 3. Austen Writer paragraph generation
+async function demoAusten() {
+  const paragraph = await generateAustenText('trigram', 5);
+  console.log(paragraph);
+}
+demoAusten();
 ```
 
 ## Available Scripts
@@ -67,10 +93,11 @@ To execute the tests:
 npm test
 ```
 
-The tests verify:
-- Standard exponential operations (positive, negative, fractional exponents)
-- Edge cases (exponent of zero, zero base)
-- Input validation throwing appropriate `TypeError` for invalid inputs (strings, `null`, `undefined`, `NaN`, `Infinity`)
+The test suite verifies:
+- Exponential calculation operations and error handling (`tests/index.test.js`)
+- Circle area calculations and boundary checks (`tests/index.test.js`)
+- Preferences and settings validation utilities (`tests/settings.test.js`)
+- Austen Writer tokenization, N-gram model construction, parameter validation, and text generation (`tests/austenWriter.test.js`)
 
 ## CI/CD Workflow
 
