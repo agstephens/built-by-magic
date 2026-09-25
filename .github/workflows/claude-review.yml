@@ -24,6 +24,8 @@ jobs:
           fetch-depth: 0 # Fetches full git history so Claude can inspect diffs against main
 
       - name: Run Claude Code PR Review
+        if: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+        continue-on-error: true
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
