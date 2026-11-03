@@ -6,7 +6,7 @@ const {
   clearCache,
 } = require('../src/austenWriter');
 
-describe('Austen Writer Module', () => {
+describe('Jane Austen Writer Module', () => {
   beforeEach(() => {
     clearCache();
   });
