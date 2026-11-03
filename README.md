@@ -19,7 +19,7 @@ The application features four main functions accessible via both Node.js exports
 3. **Colour Art Generator**
    - Generates generative canvas artwork by blending user-selected color palettes with randomized geometric shapes, circles, polygons, and ribbons.
 
-4. **Austen Writer (`generateAustenText`)**
+4. **Jane Austen Writer (`generateAustenText`)**
    - Generates paragraphs (approximately 5 sentences long) in the style of Jane Austen using N-gram language modeling (bigrams, trigrams, tetragrams).
    - Automatically downloads and caches the full source text of *Pride and Prejudice* from Project Gutenberg (`https://www.gutenberg.org/files/1342/1342-0.txt`).
    - Caches tokenized text and N-gram frequency models for fast response times.
@@ -71,7 +71,7 @@ console.log(calculatePower(2, 3)); // Outputs: 8
 // 2. Circle area calculation
 console.log(calculateCircleArea(5)); // Outputs: 78.5398...
 
-// 3. Austen Writer paragraph generation
+// 3. Jane Austen Writer paragraph generation
 async function demoAusten() {
   const paragraph = await generateAustenText('trigram', 5);
   console.log(paragraph);
@@ -97,7 +97,7 @@ The test suite verifies:
 - Exponential calculation operations and error handling (`tests/index.test.js`)
 - Circle area calculations and boundary checks (`tests/index.test.js`)
 - Preferences and settings validation utilities (`tests/settings.test.js`)
-- Austen Writer tokenization, N-gram model construction, parameter validation, and text generation (`tests/austenWriter.test.js`)
+- Jane Austen Writer tokenization, N-gram model construction, parameter validation, and text generation (`tests/austenWriter.test.js`)
 
 ## CI/CD Workflow
 

@@ -337,7 +337,7 @@
     <button class="nav-btn active" data-tab="exponent-tab">Exponent</button>
     <button class="nav-btn" data-tab="colour-tab">Colour Tool</button>
     <button class="nav-btn" data-tab="circle-tab">Circle Area</button>
-    <button class="nav-btn" data-tab="austen-tab">Austen Writer</button>
+    <button class="nav-btn" data-tab="austen-tab">Jane Austen Writer</button>
     <button class="nav-btn" data-tab="settings-tab">Settings</button>
   </nav>
 
@@ -397,9 +397,9 @@
       </div>
     </div>
 
-    <!-- Austen Writer Tool -->
+    <!-- Jane Austen Writer Tool -->
     <div id="austen-tab" class="tab-content">
-      <h1>Austen Writer</h1>
+      <h1>Jane Austen Writer</h1>
       <p class="description">Generate paragraphs in the style of Jane Austen's <em>Pride and Prejudice</em> using N-gram language models.</p>
       <div class="button-group">
         <button type="button" class="action-btn" id="austen-bigram-btn">bigram</button>
@@ -441,7 +441,7 @@
             <option value="exponent-tab">Exponential Calculator</option>
             <option value="colour-tab">Colour Art Generator</option>
             <option value="circle-tab">Circle Area Calculator</option>
-            <option value="austen-tab">Austen Writer</option>
+            <option value="austen-tab">Jane Austen Writer</option>
             <option value="settings-tab">Settings</option>
           </select>
         </div>
@@ -685,7 +685,7 @@
       }
     });
 
-    // Austen Writer Frontend Logic
+    // Jane Austen Writer Frontend Logic
     let austenSourceText = null;
     let austenTokens = null;
     const austenNGramModels = {};
@@ -796,7 +796,7 @@
           }
         }
 
-        resultTitle.textContent = `Austen Writer (${type})`;
+        resultTitle.textContent = `Jane Austen Writer (${type})`;
         resultValue.textContent = paragraph;
       } catch (err) {
         resultContainer.className = 'result-box error';

@@ -188,7 +188,7 @@ function generateTextFromModel(model, n, sentenceCount = 5) {
 }
 
 /**
- * Main function to generate Austen Writer paragraph.
+ * Main function to generate Jane Austen Writer paragraph.
  * @param {string|number} type - 'bigram', 'trigram', 'tetragram' (or 2, 3, 4).
  * @param {number} [sentenceCount=5] - Number of sentences to generate.
  * @param {string} [sourceText] - Optional source text override.
